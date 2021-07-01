@@ -1,1 +1,1 @@
-# commons-config-dashboard
+# Commons Build Configuration Dashboard
