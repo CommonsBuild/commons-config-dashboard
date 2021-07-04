@@ -7,13 +7,10 @@ import pandas as pd
 
 server = flask.Flask(__name__) # define flask app.server
 
-#external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,
-                server=server,
                 title="Commons Config Dash",
                 suppress_callback_exceptions=True,
-                #external_stylesheets=external_stylesheets
                 )
 
 app.layout = html.Div(children=[html.H1(children='Commons Configuration Dashboard')])
