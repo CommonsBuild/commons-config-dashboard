@@ -1,0 +1,23 @@
+body{
+    margin: 40px;
+}
+.input {
+    float: left;
+    margin: 10px;
+    padding-bottom:20px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.output {
+    margin: 10px;
+    padding-bottom:20px;
+    padding-left:15px;
+    padding-right:15px;
+}
+.input-row{
+    height: 200px;
+}
+.output-row{
+    height: 400px;
+}
