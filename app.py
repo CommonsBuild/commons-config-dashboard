@@ -10,7 +10,10 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from layout.layout import app_layout
-from models.token_freeze_thaw import token_freeze_thaw
+from models.token_freeze_thaw import plot_token_freeze_thaw
+from models.disputable_voting import (plot_dandelion_voting,
+                                      plot_distribution_of_voting_phases,
+                                      plot_disputable_vote_duration)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -34,11 +37,49 @@ def update_token_freeze_thaw(opening_price,
                              token_thaw_period):
     if None in [opening_price, token_freeze_period, token_thaw_period]:
         raise PreventUpdate
-    return token_freeze_thaw(
+    return plot_token_freeze_thaw(
         opening_price=int(opening_price),
         token_freeze_period=int(token_freeze_period),
         token_thaw_period=int(token_thaw_period)
     )
+
+@app.callback(
+    Output('dandelion_voting', 'figure'),
+    Input('support_required', 'value'),
+    Input('minimum_quorum', 'value')
+)
+def update_dandelion_voting(support_required, minimum_quorum):
+    return plot_dandelion_voting(support_required=support_required,
+                          minimum_quorum=minimum_quorum)
+
+
+@app.callback(
+    Output('distribution_of_voting_phases', 'figure'),
+    Output('disputable_voting_duration', 'figure'),
+    Input('vote_duration', 'value'),
+    Input('delegated_voting_period', 'value'),
+    Input('quiet_ending_period', 'value'),
+    Input('quiet_ending_extension', 'value'),
+    Input('execution_delay', 'value')
+)
+def update_disputable_voting_duration(vote_duration,
+                                      delegated_voting_period,
+                                      quiet_ending_period,
+                                      quiet_ending_extension,
+                                      execution_delay):
+    
+    figure_distribution_of_voting_phases = plot_distribution_of_voting_phases(vote_duration=vote_duration,
+                                                                              quiet_ending_period=quiet_ending_period,
+                                                                              execution_delay=execution_delay,
+                                                                              quiet_ending_extension=quiet_ending_extension)
+
+    figure_disputable_vote_duration = plot_disputable_vote_duration(vote_duration=vote_duration,
+                                                                         delegated_voting_period=delegated_voting_period,
+                                                                         quiet_ending_period=quiet_ending_period,
+                                                                         quiet_ending_extension=quiet_ending_extension,
+                                                                         execution_delay=execution_delay)
+    
+    return figure_distribution_of_voting_phases, figure_disputable_vote_duration
 
 if __name__ == "__main__":
     app.run_server(debug=True)

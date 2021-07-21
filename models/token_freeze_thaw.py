@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 
-def token_freeze_thaw(opening_price=100, token_freeze_period=10, token_thaw_period=30):
+def plot_token_freeze_thaw(opening_price=100, token_freeze_period=10, token_thaw_period=30):
     weekly_token_thaw = opening_price/token_thaw_period
     df = pd.DataFrame({ 'week' : range(1,61)})
     df['price'] = 0
