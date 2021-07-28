@@ -14,6 +14,7 @@ from models.token_freeze_thaw import plot_token_freeze_thaw
 from models.disputable_voting import (plot_dandelion_voting,
                                       plot_distribution_of_voting_phases,
                                       plot_disputable_vote_duration)
+from models.augmented_bonding_curve import plot_augmented_bonding_curve
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -41,6 +42,29 @@ def update_token_freeze_thaw(opening_price,
         opening_price=int(opening_price),
         token_freeze_period=int(token_freeze_period),
         token_thaw_period=int(token_thaw_period)
+    )
+
+@app.callback(
+    Output('augmented_bonding_curve', 'figure'),
+    Input('reserve_balance', 'value'),
+    Input('initial_price', 'value'),
+    Input('initial_supply', 'value'),
+    Input('steplist', 'value')
+)
+#TO DO: configurable list of steps
+# 3 predetermined steps, and give the user the chance to add more
+# Maybe two tabs? one big buy, one big sell
+def update_augmented_bonding_curve(reserve_balance,
+                             initial_price,
+                             initial_supply,
+                             steplist):
+    if None in [reserve_balance, initial_price, initial_supply]:
+        raise PreventUpdate
+    return plot_augmented_bonding_curve(
+        reserve_balance=int(reserve_balance),
+        initial_price=int(initial_price),
+        initial_supply=int(initial_supply),
+        steps=steplist
     )
 
 @app.callback(
