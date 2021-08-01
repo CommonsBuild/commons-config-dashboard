@@ -73,18 +73,22 @@ app_layout = html.Div(
                         html.H2("2. The Augmented Bonding Curve (ABC)"),
                         html.Div(
                             [
-                                html.Label("Reserve Balance (wxDai)"),
-                                dcc.RadioItems(
-                                    id="reserve_balance",
-                                    options=[
-                                        {"label": "100k", "value": "100"},
-                                        {"label": "500k", "value": "500"},
-                                        {"label": "1 million", "value": "100"},
-                                        {"label": "3 million", "value": "200"},
-                                        {"label": "5 million", "value": "500"},
-                                    ],
-                                    value="500000",
-                                    labelStyle={"display": "inline-block"},
+                                html.Label("Percentage of Funds to go to the commons pool"),
+                                dcc.Slider(
+                                    id="commons_percentage",
+                                    value=50,
+                                    min=0,
+                                    max=100,
+                                    step=1,
+                                    updatemode="drag",
+                                    tooltip={"always_visible": False},
+                                    marks={
+                                        0: "0%",
+                                        25: "25%",
+                                        50: "50%",
+                                        75: "75%",
+                                        100: "100%",
+                                    },
                                 ),
                             ],
                             className="input",
@@ -94,34 +98,45 @@ app_layout = html.Div(
                                 html.Label("Initial Price (wxDai)"),
                                 dcc.Slider(
                                     id="initial_price",
-                                    value=2,
+                                    value=1.5,
                                     min=1,
-                                    max=100,
-                                    step=1,
+                                    max=4,
+                                    step=0.01,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={1: "1", 50: "50", 100: "100",},
+                                    marks={1: "1", 2: "2", 3: "3", 4: "4"},
                                 ),
                             ],
                             className="input",
                         ),
                         html.Div(
                             [
-                                html.Label("Initial Supply"),
+                                html.Label("Entry Tribute (%)"),
                                 dcc.Slider(
-                                    id="initial_supply",
-                                    value=100,
+                                    id="entry_tribute",
+                                    value=5,
                                     min=0,
-                                    max=200,
+                                    max=100,
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={
-                                        25: "25%",
-                                        50: "50%",
-                                        75: "75%",
-                                        100: "100%",
-                                    },
+                                    marks={0: "0%", 25: "25%", 50: "50%", 75: "75%", 100: "100%"},
+                                ),
+                            ],
+                            className="input",
+                        ),
+                        html.Div(
+                            [
+                                html.Label("Exit Tribute (%)"),
+                                dcc.Slider(
+                                    id="exit_tribute",
+                                    value=5,
+                                    min=0,
+                                    max=100,
+                                    step=1,
+                                    updatemode="drag",
+                                    tooltip={"always_visible": False},
+                                    marks={0: "0%", 25: "25%", 50: "50%", 75: "75%", 100: "100%"},
                                 ),
                             ],
                             className="input",
@@ -134,17 +149,14 @@ app_layout = html.Div(
 
                         html.Div(
                             [
-                                html.Label("steps"),
+                                html.Label("Scenario"),
                                 dcc.Dropdown(
                                     id="steplist",
                                     options=[
-                                        {"label": "100k", "value": "10"},
-                                        {"label": "-500k", "value": "-50"},
-                                        {"label": "1 million", "value": "10"},
-
+                                        {"label": "Big Buy", "value": "1" },
+                                        {"label": "Big Sell", "value": "2" },
                                     ],
-                                    value="5000",
-                                    multi=True
+                                    value="1",
                                 ),
                             ],
                             className="input",
