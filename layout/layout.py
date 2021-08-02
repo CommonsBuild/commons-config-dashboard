@@ -209,7 +209,80 @@ app_layout = html.Div([
         ], className='output-row'),
         html.Div([
             html.H2('4. Disputable Conviction Voting'),
+            html.Div([
+                html.Label('Relative Spending Limit (%)'),
+                dcc.Slider(
+                    id='relative_spending_limit',
+                    value=10,
+                    min=0,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        0 : '0%',
+                        5 : '5%',
+                        10 : '10%',
+                    }
+                ),
+            ], className='input'),
+            html.Div([
+                html.Label('Conviction Growth (%)'),
+                dcc.Slider(
+                    id='conviction_growth',
+                    value=2,
+                    min=0,
+                    max=20,
+                    step=0.5,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        0 : '0%',
+                        50 : '50%',
+                        100 : '100%',
+                    }
+                ),
+            ], className='input'),
+            html.Div([
+                html.Label('Minimum Conviction (%)'),
+                dcc.Slider(
+                    id='minimum_conviction',
+                    value=2,
+                    min=0,
+                    max=5,
+                    step=0.1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        0 : '0%',
+                        2.5 : '2.5%',
+                        5 : '5%',
+                    }
+                ),
+            ], className='input'),
         ], className='input-row'),
+        html.Div([
+            html.Div([
+                dcc.Graph(id='graph_conviction_decay'),
+            ], className='output'),
+            html.Div([
+                dcc.Graph(id='graph_effective_supply_approve'),
+            ], className='output'),
+            html.Div([
+                dcc.Graph(id='graph_disputable_conviction_voting'),
+                dcc.RadioItems(
+                    options=[
+                        {'label': '7 Days', 'value': 7},
+                        {'label': '2 Weeks', 'value': 14},
+                        {'label': '1 Month', 'value': 30},
+                        {'label': '3 Months', 'value': 90},
+                        {'label': '6 Months', 'value': 180}
+                    ],
+                    value='MTL',
+                    labelStyle={'display': 'inline-block'}
+                )  
+            ], className='output'),  
+        ], className='output-row'),
               
     ])
 ])
