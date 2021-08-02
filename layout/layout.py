@@ -20,7 +20,13 @@ app_layout = html.Div(
                                     step=0.5,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={1: "1", 2: "2", 3: "3", 4: "4", 5: "5",},
+                                    marks={
+                                        1: "1",
+                                        2: "2",
+                                        3: "3",
+                                        4: "4",
+                                        5: "5",
+                                    },
                                 ),
                             ],
                             className="input",
@@ -36,7 +42,11 @@ app_layout = html.Div(
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={2: "2", 10: "10", 20: "20",},
+                                    marks={
+                                        2: "2",
+                                        10: "10",
+                                        20: "20",
+                                    },
                                 ),
                             ],
                             className="input",
@@ -63,7 +73,10 @@ app_layout = html.Div(
                 html.Div(
                     [
                         html.Div(
-                            [dcc.Graph(id="token_freeze_thaw"),], className="output"
+                            [
+                                dcc.Graph(id="token_freeze_thaw"),
+                            ],
+                            className="output",
                         )
                     ],
                     className="output-row",
@@ -73,7 +86,9 @@ app_layout = html.Div(
                         html.H2("2. The Augmented Bonding Curve (ABC)"),
                         html.Div(
                             [
-                                html.Label("Percentage of Funds to go to the commons pool"),
+                                html.Label(
+                                    "Percentage of Funds to go to the commons pool"
+                                ),
                                 dcc.Slider(
                                     id="commons_percentage",
                                     value=25,
@@ -120,7 +135,13 @@ app_layout = html.Div(
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={0: "0%", 25: "25%", 50: "50%", 75: "75%", 100: "100%"},
+                                    marks={
+                                        0: "0%",
+                                        25: "25%",
+                                        50: "50%",
+                                        75: "75%",
+                                        100: "100%",
+                                    },
                                 ),
                             ],
                             className="input",
@@ -136,7 +157,13 @@ app_layout = html.Div(
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
-                                    marks={0: "0%", 25: "25%", 50: "50%", 75: "75%", 100: "100%"},
+                                    marks={
+                                        0: "0%",
+                                        25: "25%",
+                                        50: "50%",
+                                        75: "75%",
+                                        100: "100%",
+                                    },
                                 ),
                             ],
                             className="input",
@@ -146,15 +173,14 @@ app_layout = html.Div(
                 ),
                 html.Div(
                     [
-
                         html.Div(
                             [
                                 html.Label("Scenario"),
                                 dcc.Dropdown(
                                     id="steplist",
                                     options=[
-                                        {"label": "Big Buy", "value": "1" },
-                                        {"label": "Big Sell", "value": "2" },
+                                        {"label": "Big Buy", "value": "1"},
+                                        {"label": "Big Sell", "value": "2"},
                                     ],
                                     value="1",
                                 ),
@@ -167,159 +193,140 @@ app_layout = html.Div(
                 html.Div(
                     [
                         html.Div(
-                            [dcc.Graph(id="augmented_bonding_curve"),],
+                            [
+                                dcc.Graph(id="augmented_bonding_curve"),
+                            ],
                             className="output",
                         )
                     ],
                     className="output-row",
                 ),
-                html.Div(
-                    [
-                        html.H2("3. Disputable Voting"),
-                        html.Div(
-                            [
-                                html.Label("Support Required (%)"),
-                                dcc.Slider(
-                                    id="support_required",
-                                    value=20,
-                                    min=0,
-                                    max=100,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={0: "0%", 50: "50%", 100: "100%",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                        html.Div(
-                            [
-                                html.Label("Minimum Quorum (%)"),
-                                dcc.Slider(
-                                    id="minimum_quorum",
-                                    value=20,
-                                    min=0,
-                                    max=100,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={0: "0%", 50: "50%", 100: "100%",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                    ],
-                    className="input-row",
+                html.Div([
+            html.H2('3. Disputable Voting'),
+            html.Div([
+                html.Label('Support Required (%)'),
+                dcc.Slider(
+                    id='support_required',
+                    value=20,
+                    min=0,
+                    max=100,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        0 : '0%',
+                        50 : '50%',
+                        100 : '100%',
+                    }
                 ),
-                html.Div(
-                    [html.Div([dcc.Graph(id="dandelion_voting"),], className="output")],
-                    className="output-row",
+            ], className='input'),
+            html.Div([
+                html.Label('Minimum Quorum (%)'),
+                dcc.Slider(
+                    id='minimum_quorum',
+                    value=20,
+                    min=0,
+                    max=100,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        0 : '0%',
+                        50 : '50%',
+                        100 : '100%',
+                    }
                 ),
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.Label("Vote Duration (days)"),
-                                dcc.Slider(
-                                    id="vote_duration",
-                                    value=5,
-                                    min=1,
-                                    max=10,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={1: "1 day", 5: "5 days", 10: "10 days",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                        html.Div(
-                            [
-                                html.Label("Delegated Voting Period (days)"),
-                                dcc.Slider(
-                                    id="delegated_voting_period",
-                                    value=5,
-                                    min=1,
-                                    max=10,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={1: "1 day", 5: "5 days", 10: "10 days",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                        html.Div(
-                            [
-                                html.Label("Quiet Ending Period (days)"),
-                                dcc.Slider(
-                                    id="quiet_ending_period",
-                                    value=5,
-                                    min=1,
-                                    max=10,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={1: "1 day", 5: "5 days", 10: "10 days",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                        html.Div(
-                            [
-                                html.Label("Quiet Ending Extension (days)"),
-                                dcc.Slider(
-                                    id="quiet_ending_extension",
-                                    value=5,
-                                    min=1,
-                                    max=10,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={1: "1 day", 5: "5 days", 10: "10 days",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                        html.Div(
-                            [
-                                html.Label("Execution Delay (days)"),
-                                dcc.Slider(
-                                    id="execution_delay",
-                                    value=5,
-                                    min=1,
-                                    max=10,
-                                    step=1,
-                                    updatemode="drag",
-                                    tooltip={"always_visible": False},
-                                    marks={1: "1 day", 5: "5 days", 10: "10 days",},
-                                ),
-                            ],
-                            className="input",
-                        ),
-                    ],
-                    className="input-row-large",
+            ], className='input'),
+        ], className='input-row'),
+        html.Div([
+            html.Div([
+                dcc.Graph(id='dandelion_voting'),
+            ], className='output')
+        ], className='output-row'),
+            html.Div([
+            html.Div([
+                html.Label('Vote Duration (days)'),
+                dcc.Slider(
+                    id='vote_duration',
+                    value=5,
+                    min=1,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        1: '1 day',
+                        5 : '5 days',
+                        10 : '10 days',
+                    }
                 ),
-                html.Div(
-                    [
-                        html.Div(
-                            [dcc.Graph(id="distribution_of_voting_phases"),],
-                            className="output",
-                        )
-                    ],
-                    className="output-row",
+            ], className='input'),
+            html.Div([
+                html.Label('Delegated Voting Period (days)'),
+                dcc.Slider(
+                    id='delegated_voting_period',
+                    value=5,
+                    min=1,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        1: '1 day',
+                        5 : '5 days',
+                        10 : '10 days',
+                    }
                 ),
-                html.Div(
-                    [
-                        html.Div(
-                            [dcc.Graph(id="disputable_voting_duration"),],
-                            className="output",
-                        )
-                    ],
-                    className="output-row",
+            ], className='input'),
+            html.Div([
+                html.Label('Quiet Ending Period (days)'),
+                dcc.Slider(
+                    id='quiet_ending_period',
+                    value=5,
+                    min=1,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        1: '1 day',
+                        5 : '5 days',
+                        10 : '10 days',
+                    }
                 ),
-                html.Div(
-                    [html.H2("4. Disputable Conviction Voting"),], className="input-row"
+            ], className='input'),
+            html.Div([
+                html.Label('Quiet Ending Extension (days)'),
+                dcc.Slider(
+                    id='quiet_ending_extension',
+                    value=5,
+                    min=1,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        1: '1 day',
+                        5 : '5 days',
+                        10 : '10 days',
+                    }
+                ),
+            ], className='input'),
+            html.Div([
+                html.Label('Execution Delay (days)'),
+                dcc.Slider(
+                    id='execution_delay',
+                    value=5,
+                    min=1,
+                    max=10,
+                    step=1,
+                    updatemode='drag',
+                    tooltip={'always_visible' : False},
+                    marks={
+                        1: '1 day',
+                        5 : '5 days',
+                        10 : '10 days',
+                    }
                 ),
             ], className='input'),
         ], className='input-row-large'),
