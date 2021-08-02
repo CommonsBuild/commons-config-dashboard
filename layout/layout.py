@@ -76,7 +76,7 @@ app_layout = html.Div(
                                 html.Label("Percentage of Funds to go to the commons pool"),
                                 dcc.Slider(
                                     id="commons_percentage",
-                                    value=50,
+                                    value=25,
                                     min=0,
                                     max=100,
                                     step=1,
