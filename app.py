@@ -17,6 +17,11 @@ from models.disputable_conviction_voting import (plot_coviction_voting_decay,
 from models.disputable_voting import (plot_dandelion_voting,
                                       plot_distribution_of_voting_phases,
                                       plot_disputable_vote_duration)
+from models.augmented_bonding_curve import plot_augmented_bonding_curve
+
+#Hardcoded for the example, will be a set number when the dashboard launches
+TOTAL_FUNDING  = 100
+INITIAL_SUPPLY = 100
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -44,6 +49,46 @@ def update_token_freeze_thaw(opening_price,
         opening_price=float(opening_price),
         token_freeze_period=float(token_freeze_period),
         token_thaw_period=float(token_thaw_period)
+    )
+
+@app.callback(
+    Output('augmented_bonding_curve', 'figure'),
+    Input('commons_percentage', 'value'),
+    Input('initial_price', 'value'),
+    Input('entry_tribute', 'value'),
+    Input('exit_tribute', 'value'),
+    Input('steplist', 'value')
+)
+#TO DO: configurable list of steps
+# 3 predetermined steps, and give the user the chance to add more
+# Maybe two tabs? one big buy, one big sell
+#
+# total commons pool (from which to withdraw commons_percentage):
+# initial supply (fixed after hatch): 
+def update_augmented_bonding_curve(
+                             commons_percentage,
+                             initial_price,
+                             entry_tribute,
+                             exit_tribute,
+                             steplist
+                             ):
+
+    #check funding_percentage != 100% 
+    if None in [commons_percentage, initial_price, entry_tribute, exit_tribute]:
+        raise PreventUpdate
+
+    #
+
+
+    initial_reserve = TOTAL_FUNDING - (TOTAL_FUNDING * (commons_percentage/100))
+
+    return plot_augmented_bonding_curve(
+        reserve_balance=initial_reserve,
+        initial_price=initial_price,
+        initial_supply=INITIAL_SUPPLY,
+        entry_tribute= entry_tribute / 100,
+        exit_tribute= exit_tribute / 100,
+        steps=steplist
     )
 
 @app.callback(
