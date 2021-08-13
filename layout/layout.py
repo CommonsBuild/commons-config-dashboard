@@ -87,13 +87,30 @@ app_layout = html.Div(
                         html.Div(
                             [
                                 html.Label(
+                                    "Choose initial Funding  collected in the hatch"
+                                ),
+                                dcc.Dropdown(
+                                    id="hatch_funding",
+                                    options=[
+                                        {"label": "400k", "value": "400"},
+                                        {"label": "1M", "value": "1000"},
+                                        {"label": "2M", "value": "2000"},
+                                    ],
+                                    value="1000",
+                                ),
+                            ],
+                            className="input",
+                        ),
+                        html.Div(
+                            [
+                                html.Label(
                                     "Percentage of Funds to go to the commons pool"
                                 ),
                                 dcc.Slider(
                                     id="commons_percentage",
                                     value=25,
                                     min=0,
-                                    max=100,
+                                    max=95,
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
@@ -102,12 +119,17 @@ app_layout = html.Div(
                                         25: "25%",
                                         50: "50%",
                                         75: "75%",
-                                        100: "100%",
+                                        95: "95%",
                                     },
                                 ),
                             ],
                             className="input",
                         ),
+                    ],
+                    className="input-row",
+                ),
+                html.Div(
+                    [
                         html.Div(
                             [
                                 html.Label("Initial Price (wxDai)"),
@@ -131,7 +153,7 @@ app_layout = html.Div(
                                     id="entry_tribute",
                                     value=5,
                                     min=0,
-                                    max=100,
+                                    max=99,
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
@@ -140,7 +162,7 @@ app_layout = html.Div(
                                         25: "25%",
                                         50: "50%",
                                         75: "75%",
-                                        100: "100%",
+                                        99: "99%",
                                     },
                                 ),
                             ],
@@ -153,7 +175,7 @@ app_layout = html.Div(
                                     id="exit_tribute",
                                     value=5,
                                     min=0,
-                                    max=100,
+                                    max=99,
                                     step=1,
                                     updatemode="drag",
                                     tooltip={"always_visible": False},
@@ -162,7 +184,7 @@ app_layout = html.Div(
                                         25: "25%",
                                         50: "50%",
                                         75: "75%",
-                                        100: "100%",
+                                        99: "99%",
                                     },
                                 ),
                             ],
@@ -194,10 +216,35 @@ app_layout = html.Div(
                     [
                         html.Div(
                             [
+                                html.Label("Zoom in?"),
+                                dcc.Dropdown(
+                                    id="zoom_graph",
+                                    options=[
+                                        {"label": "No", "value": "0"},
+                                        {"label": "Yes", "value": "1"},
+                                    ],
+                                    value="0",
+                                ),
+                            ],
+                            className="input",
+                        ),
+                    ],
+                    className="input-row",
+                ),
+                html.Div(
+                    [
+                        html.Div(
+                            [
                                 dcc.Graph(id="augmented_bonding_curve"),
                             ],
                             className="output",
                         )
+                    ],
+                    className="output-row",
+                ),
+                html.Div(
+                    [
+                        html.Div(id="buy_sell_table")
                     ],
                     className="output-row",
                 ),
