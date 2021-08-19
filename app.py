@@ -20,6 +20,9 @@ from models.disputable_voting import (plot_dandelion_voting,
 from models.augmented_bonding_curve import (BondingCurveHandler) 
 
 
+
+
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,
@@ -51,39 +54,43 @@ def update_token_freeze_thaw(opening_price,
 @app.callback(
     Output('augmented_bonding_curve', 'figure'),
     Output('buy_sell_table', 'children'),
-    Input('hatch_funding', 'value'),
     Input('commons_percentage', 'value'),
+    Input('ragequit_percentage', 'value'),
     Input('initial_price', 'value'),
     Input('entry_tribute', 'value'),
     Input('exit_tribute', 'value'),
+    Input('hatch_scenario_funding', 'value'),
     Input('steplist', 'value'),
     Input('zoom_graph', 'value')
 ) 
-def update_augmented_bonding_curve(hatch_funding,
+def update_augmented_bonding_curve(
                              commons_percentage,
+                             ragequit_percentage,
                              initial_price,
                              entry_tribute,
                              exit_tribute,
+                             hatch_scenario_funding,
                              steplist,
                              zoom_graph,
                              ):
 
     if commons_percentage >= 100 or commons_percentage < 0:
         raise PreventUpdate
-    if None in [commons_percentage, initial_price, entry_tribute, exit_tribute, zoom_graph]:
+    if None in [commons_percentage, ragequit_percentage, initial_price, entry_tribute, exit_tribute, zoom_graph]:
         raise PreventUpdate
 
     if(steplist=="1"):
         steplist = [[5, "TEC"], [1000, "wxDai"], [10, "TEC"]]
     elif(steplist=="2"):
-        steplist = [[30, "wxDai"], [5, "TEC"], [30, "wxDai"]]
+        steplist = [[30, "wxDai"], [25, "TEC"], [30, "wxDai"]]
 
     bCurve_handler = BondingCurveHandler(
-                             hatch_funding,
                              commons_percentage,
+                             ragequit_percentage,
                              initial_price,
                              entry_tribute,
                              exit_tribute,
+                             hatch_scenario_funding,
                              steplist,
                              zoom_graph)
 
