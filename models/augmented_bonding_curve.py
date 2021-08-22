@@ -145,7 +145,6 @@ class BondingCurveHandler():
         
         #set the current supply to the point where the scenarios are going to happen
         if(float(hatch_scenario_funding) != TOTAL_HACTH_FUNDING):
-            print("enter")
             scenario_supply= self.bonding_curve.get_supply(float(hatch_scenario_funding))
             self.bonding_curve.set_new_supply(scenario_supply)
         
