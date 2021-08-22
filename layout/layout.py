@@ -87,16 +87,17 @@ app_layout = html.Div(
                         html.Div(
                             [
                                 html.Label(
-                                    "Choose initial Funding  collected in the hatch"
+                                    "Choose funding level at which your scenario will be calculated"
                                 ),
                                 dcc.Dropdown(
-                                    id="hatch_funding",
+                                    id="hatch_scenario_funding",
                                     options=[
                                         {"label": "400k", "value": "400"},
                                         {"label": "1M", "value": "1000"},
+                                        {"label": "Actual Hatch Data", "value":"1571.22357"},
                                         {"label": "2M", "value": "2000"},
                                     ],
-                                    value="1000",
+                                    value="1571.22357",
                                 ),
                             ],
                             className="input",
@@ -120,6 +121,25 @@ app_layout = html.Div(
                                         50: "50%",
                                         75: "75%",
                                         95: "95%",
+                                    },
+                                ),
+                                html.Label(
+                                    "Percentage of Funds ragequitted"
+                                ),
+                                dcc.Slider(
+                                    id="ragequit_percentage",
+                                    value=5,
+                                    min=0,
+                                    max=20,
+                                    step=1,
+                                    updatemode="drag",
+                                    tooltip={"always_visible": False},
+                                    marks={
+                                        0: "0%",
+                                        5: "5%",
+                                        10: "10%",
+                                        15: "15%",
+                                        20: "20%",
                                     },
                                 ),
                             ],

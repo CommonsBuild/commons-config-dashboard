@@ -12,6 +12,10 @@ import numpy as np
 import dash_table
 import dash_html_components as dash_html
 
+#These numbers are fixed from the hatch results (in thousands)
+TOTAL_HACTH_FUNDING = 1571.22357 
+TOTAL_INITIAL_TECH_SUPPLY= 2035.918945 
+
 
 class BondingCurveInitializer:
 
@@ -34,6 +38,23 @@ class BondingCurveInitializer:
         return (
             self.reserve_ratio() * self.get_price(supply) * supply
         )
+
+    #Returns supply at a specific balance. THIS IS AN APPROXIMATION only meant for visualizing scenarios
+    def get_supply(self, balance):
+        supply_ref = 0
+        while self.get_balance(supply_ref) <  balance:
+            supply_ref = supply_ref + 10
+
+        df = self.curve_over_balance(supply_ref-10, supply_ref, 10000)
+        df_rounded = df.round(3)
+        
+        index= df.index.where(df_rounded['Balance (in thousands)'] >= balance).dropna()[0]
+        price = df.at[index, "Price"]
+
+        supply = balance/(price* self.reserve_ratio())
+        
+
+        return supply
 
     #For drawing the bonding curve. Range shows how many times the initial supply you make the graph for, steps how many subdivisions
     def curve_over_supply(self, range_begin=0, range_end=1000, steps=1000):
@@ -96,29 +117,37 @@ class BondingCurveHandler():
     '''
 
     def __init__(self,
-                 hatch_funding,
                  commons_percentage,
+                 ragequit_percentage,
                  initial_price,
                  entry_tribute,
                  exit_tribute,
+                 hatch_scenario_funding,
                  steplist,
                  zoom_graph=0,
                  plot_mode=0):
         #
         #check here for validity of parameters
         #
-        params_valid = self.check_param_validity( int(hatch_funding),
+        params_valid = self.check_param_validity( 
                  commons_percentage,
+                 ragequit_percentage,
                  initial_price,
                  entry_tribute,
                  exit_tribute,
+                 float(hatch_scenario_funding),
                  steplist,
                  int(zoom_graph),
                  int(plot_mode)
                  )
-
-        # WARNING: Right now it is taking the funding before commons tribute as supply (since 1wxDai = 1TEC). When there is a definitive number that will have to be changed
-        self.bonding_curve = self.create_bonding_curve(hatch_funding= int(hatch_funding), initial_supply= int(hatch_funding), commons_percentage=commons_percentage, initial_price=initial_price, entry_tribute= entry_tribute / 100, exit_tribute= exit_tribute / 100)
+        #The numbers for initial supply and taken from the constants
+        self.bonding_curve = self.create_bonding_curve(commons_percentage=commons_percentage, ragequit_percentage=ragequit_percentage, initial_price=initial_price, entry_tribute= entry_tribute / 100, exit_tribute= exit_tribute / 100)
+        
+        #set the current supply to the point where the scenarios are going to happen
+        if(float(hatch_scenario_funding) != TOTAL_HACTH_FUNDING):
+            scenario_supply= self.bonding_curve.get_supply(float(hatch_scenario_funding))
+            self.bonding_curve.set_new_supply(scenario_supply)
+        
         self.steps_table = self.generate_outputs_table(bondingCurve= self.bonding_curve, steplist= steplist)
         self.zoom_graph = zoom_graph
         self.plot_mode = plot_mode
@@ -130,12 +159,15 @@ class BondingCurveHandler():
         figure_buy_sell_table = self.get_data_table(self.steps_table)
 
         #figure_bonding_curve = self.get_data_augmented_bonding_curve(bondingCurve= self.bonding_curve, steps_table= self.steps_table, zoom_graph=self.zoom_graph, plot_mode=self.plot_mode)
-        #figure_buy_sell_table = self.steps_table.to_dict(orient='list')
+        #figure_buy_sell_table = self.steps_table.loc[:,["Step", "Current Price", "Amount in", "Tribute collected", "Amount out", "New Price", "Slippage"]].to_dict(orient='list')
 
         return figure_bonding_curve, figure_buy_sell_table
 
-    def create_bonding_curve(self, hatch_funding=100, initial_supply=100, commons_percentage=50, initial_price=3, entry_tribute=0.05, exit_tribute=0.05):
+    def create_bonding_curve(self, commons_percentage=50, ragequit_percentage=5,  initial_price=3, entry_tribute=0.05, exit_tribute=0.05):
         
+        initial_supply = TOTAL_INITIAL_TECH_SUPPLY * (1 - (ragequit_percentage/100))
+        hatch_funding= TOTAL_HACTH_FUNDING * (1 - (ragequit_percentage/100))
+
         initial_reserve = hatch_funding - (hatch_funding * (commons_percentage/100))
         
         bCurve = BondingCurve(initial_reserve, initial_price, initial_supply, entry_tribute, exit_tribute)
@@ -281,11 +313,13 @@ class BondingCurveHandler():
         return fig
         #return curve_draw
 
-    def check_param_validity(self, hatch_funding, commons_percentage, initial_price, entry_tribute, exit_tribute, steplist, zoom_graph, plot_mode):
-        if hatch_funding <= 0:
-            raise ValueError("Error: Invalid  Hatch Funding Parameter.")
+    def check_param_validity(self, commons_percentage, ragequit_percentage, initial_price, entry_tribute, exit_tribute,  hatch_scenario_funding,  steplist, zoom_graph, plot_mode):
+        if hatch_scenario_funding <= 0:
+            raise ValueError("Error: Invalid  Hatch Scenario Funding Parameter.")
         if commons_percentage < 0 or commons_percentage > 95:
             raise ValueError("Error: Invalid Commons Percentage Parameter.")
+        if ragequit_percentage < 0 or ragequit_percentage > 20:
+            raise ValueError("Error: Invalid Ragequit Percentage Parameter.")
         if initial_price <=0:
             raise ValueError("Error: Invalid Initial Price Parameter.")
         if entry_tribute < 0 or entry_tribute >= 100:
@@ -303,6 +337,8 @@ class BondingCurveHandler():
         
 
     def get_data_table(self, steps_table):
+
+        steps_table = steps_table.loc[:,["Step", "Current Price", "Amount in", "Tribute collected", "Amount out", "New Price", "Slippage"]]
 
         data = steps_table.to_dict("records")
         cols = [{"name": i, "id": i} for i in steps_table.columns]
